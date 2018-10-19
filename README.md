@@ -22,7 +22,9 @@ Action code for the ***Temperature & Humidity [SHT31]*** bundle. It can reply yo
 2. Create an English assistant in ***[Snips console](https://console.snips.ai/)***
 3. Add APP ***Temperature & Humidity [SHT31]***
 4. Deploy assistant by ***[Sam](https://snips.gitbook.io/documentation/console/deploy-your-assistant)***
-5. Have fun ***;-)***
+5. (On Pi) Add permission to `_snips-skill` user to access i2c: `sudo usermod -a -G i2c,spi,gpio,audio _snips-skills`
+6. (On Pi) Restart snips-skill-server: `sudo systemctl restart snips-skill-server`
+7. Have fun ***;-)***
 
 ## Acknowledgements
 
