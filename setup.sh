@@ -28,7 +28,4 @@ sudo python setup.py install
 cp Adafruit_SHT31.py ..
 cd ..
 
-rm -r Adafruit_Python_SHT31
-rm -r Adafruit_Python_GPIO
-
 pip install -r requirements.txt
