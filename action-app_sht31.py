@@ -10,8 +10,6 @@ from Adafruit_SHT31 import *
 
 CONFIG_INI = "config.ini"
 
-
-
 class Temperature_Humidity_SHT31(object):
     def __init__(self):
 
@@ -26,6 +24,7 @@ class Temperature_Humidity_SHT31(object):
         self.mqtt_port = self.config.get('secret',{"mqtt_port":"1883"}).get('mqtt_port','1883')
         self.mqtt_addr = "{}:{}".format(self.mqtt_host, self.mqtt_port)
 
+        self.site_id = self.config.get('secret',{"site_id":"default"}).get('site_id','default')
         self.sensor = SHT31(address = 0x44)
         self.start_blocking()
     
@@ -37,6 +36,9 @@ class Temperature_Humidity_SHT31(object):
         if intent_message.slots.unit:
             unit = intent_message.slots.unit.first().value
         
+        if intent_message.site_id != self.site_id:
+            return
+
         temp = round(self.sensor.read_temperature(), 1)
         temp_f = round(self.c_to_f(temp), 1)
         print "Celsius: {}*C / Fahrenheit {}*F".format(temp, temp_f)
@@ -50,6 +52,8 @@ class Temperature_Humidity_SHT31(object):
             hermes.publish_end_session(intent_message.session_id, msg.format(temp, ' degree'))
 
     def askHumidity(self, hermes, intent_message):
+        if intent_message.site_id != self.site_id:
+            return
         humidity = round(self.sensor.read_humidity(), 2)
         print "Humidity: {}%".format(humidity)
         msg = "The current humidity is {}%".format(humidity)
