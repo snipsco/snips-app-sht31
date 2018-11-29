@@ -2,4 +2,5 @@
 mqtt_host=localhost
 mqtt_port=1883
 site_id=default
-if_fahrenheit=0
+
+if_fahrenheit=false
