@@ -1,4 +1,6 @@
 ## snips-app-sht31
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/snipsco/snips-app-sht31/blob/master/LICENSE)
+
 Action code for the ***Temperature & Humidity [SHT31]*** bundle. It can reply you the current temperature and humidity.
 
 ## Usage
@@ -29,3 +31,11 @@ Action code for the ***Temperature & Humidity [SHT31]*** bundle. It can reply yo
 ## Acknowledgements
 
 Thanks to [Adafruit](https://github.com/ralf1070/Adafruit_Python_SHT31) providing the lovely SHT31 library.
+
+## Contributing
+
+Please see the [Contribution Guidelines](https://github.com/snipsco/snips-app-sht31/blob/master/CONTRIBUTING.md).
+
+## Copyright
+
+This library is provided by [Snips](https://www.snips.ai) as Open Source software. See [LICENSE](https://github.com/snipsco/snips-app-sht31/blob/master/LICENSE) for more information.
