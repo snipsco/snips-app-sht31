@@ -3,4 +3,4 @@ venv/
 config.ini
 Adafruit_Python_GPIO/
 Adafruit_Python_SHT31/
-action-app_sht31.py
+Adafruit_SHT31.py
