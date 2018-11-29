@@ -1,0 +1,5 @@
+[secret]
+mqtt_host=snips-seeed-master.local
+mqtt_port=1883
+site_id=bedroom
+if_fahrenheit=0
