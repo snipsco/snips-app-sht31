@@ -17,15 +17,20 @@ fi
 
 . $VENV/bin/activate
 
-git clone https://github.com/adafruit/Adafruit_Python_GPIO.git
-cd Adafruit_Python_GPIO
-python setup.py install
-cd ..
+#git clone https://github.com/adafruit/Adafruit_Python_GPIO.git
+#cd Adafruit_Python_GPIO
+#python setup.py install
+#cd ..
 
-git clone https://github.com/ralf1070/Adafruit_Python_SHT31.git
-cd Adafruit_Python_SHT31
-sudo python setup.py install
-cp Adafruit_SHT31.py ..
-cd ..
+#git clone https://github.com/ralf1070/Adafruit_Python_SHT31.git
+#cd Adafruit_Python_SHT31
+#sudo python setup.py install
+#cp Adafruit_SHT31.py ..
+#cd ..
 
 pip install -r requirements.txt
+
+if [ ! -e "./config.ini" ]
+then
+    cp config.ini.default config.ini
+fi
