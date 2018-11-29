@@ -33,11 +33,9 @@ class Temperature_Humidity_SHT31(object):
         return c * 9.0 / 5.0 + 32.0
 
     def askTemperature(self, hermes, intent_message):
-        if intent_message.site_id != self.site_id:
-            return
-
         temp = round(self.sensor.read_temperature(), 1)
         temp_f = round(self.c_to_f(temp), 1)
+        
         print "Celsius: {}*C / Fahrenheit {}*F".format(temp, temp_f)
         msg = "The current temperature is {}{}"
 
@@ -49,19 +47,19 @@ class Temperature_Humidity_SHT31(object):
         hermes.publish_end_session(intent_message.session_id, msg)
 
     def askHumidity(self, hermes, intent_message):
-        if intent_message.site_id != self.site_id:
-            return
-
         humidity = round(self.sensor.read_humidity(), 2)
+        
         print "Humidity: {}%".format(humidity)
         msg = "The current humidity is {}%".format(humidity)
+        
         hermes.publish_end_session(intent_message.session_id, msg)
 
     def master_intent_callback(self,hermes, intent_message):
-        coming_intent = intent_message.intent.intent_name
-        if coming_intent == 'coorfang:askTemperature':
+        if intent_message.site_id != self.site_id:
+            return
+        if intent_message.intent.intent_name == 'coorfang:askTemperature':
             self.askTemperature(hermes, intent_message)
-        if coming_intent == 'coorfang:askHumidity':
+        if intent_message.intent.intent_name == 'coorfang:askHumidity':
             self.askHumidity(hermes, intent_message)
 
     def start_blocking(self):
