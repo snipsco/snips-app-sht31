@@ -25,10 +25,10 @@ class Temperature_Humidity_SHT31(object):
         self.mqtt_addr = "{}:{}".format(self.mqtt_host, self.mqtt_port)
 
         self.site_id = self.config.get('secret',{"site_id":"default"}).get('site_id','default')
-        self.if_fahrenheit = self.config.get('secret',{"if_fahrenheit":"0"}).get('mqtt_port', "0")
+        self.if_fahrenheit = self.config.get('secret',{"if_fahrenheit":"false"}).get('if_fahrenheit', "false")
         self.sensor = SHT31(address = 0x44)
         self.start_blocking()
-    
+
     def c_to_f(self, c):
         return c * 9.0 / 5.0 + 32.0
 
@@ -39,10 +39,12 @@ class Temperature_Humidity_SHT31(object):
         print "Celsius: {}*C / Fahrenheit {}*F".format(temp, temp_f)
         msg = "The current temperature is {}{}"
 
-        if not int(self.if_fahrenheit):
+        if self.if_fahrenheit.lower() == "false":
             msg = msg.format(temp, ' degree')
-        else:
+        elif self.if_fahrenheit.lower() == "true":
             msg = msg.format(temp_f, ' fahrenheit degree')
+        else:
+            msg = "No unit specified, please check config.ini file"
 
         hermes.publish_end_session(intent_message.session_id, msg)
 
