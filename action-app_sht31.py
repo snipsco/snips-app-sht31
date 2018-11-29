@@ -25,6 +25,7 @@ class Temperature_Humidity_SHT31(object):
         self.mqtt_addr = "{}:{}".format(self.mqtt_host, self.mqtt_port)
 
         self.site_id = self.config.get('secret',{"site_id":"default"}).get('site_id','default')
+        self.if_fahrenheit = self.config.get('secret',{"if_fahrenheit":"0"}).get('mqtt_port', "0")
         self.sensor = SHT31(address = 0x44)
         self.start_blocking()
     
@@ -32,10 +33,6 @@ class Temperature_Humidity_SHT31(object):
         return c * 9.0 / 5.0 + 32.0
 
     def askTemperature(self, hermes, intent_message):
-        unit = None
-        if intent_message.slots.unit:
-            unit = intent_message.slots.unit.first().value
-        
         if intent_message.site_id != self.site_id:
             return
 
@@ -44,16 +41,17 @@ class Temperature_Humidity_SHT31(object):
         print "Celsius: {}*C / Fahrenheit {}*F".format(temp, temp_f)
         msg = "The current temperature is {}{}"
 
-        if unit == "celsius":
-            hermes.publish_end_session(intent_message.session_id, msg.format(temp, ' degree'))
-        elif unit == "fahrenheit":
-            hermes.publish_end_session(intent_message.session_id, msg.format(temp_f, ' fahrenheit degree'))
-        elif unit is None:
-            hermes.publish_end_session(intent_message.session_id, msg.format(temp, ' degree'))
+        if not int(self.if_fahrenheit):
+            msg = msg.format(temp, ' degree')
+        else:
+            msg = msg.format(temp_f, ' fahrenheit degree')
+
+        hermes.publish_end_session(intent_message.session_id, msg)
 
     def askHumidity(self, hermes, intent_message):
         if intent_message.site_id != self.site_id:
             return
+
         humidity = round(self.sensor.read_humidity(), 2)
         print "Humidity: {}%".format(humidity)
         msg = "The current humidity is {}%".format(humidity)
