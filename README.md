@@ -28,7 +28,7 @@ Action code for the ***Temperature & Humidity [SHT31]*** bundle. It can reply yo
 ### Install only action
 ```
 sam install actions -g https://github.com/snipsco/snips-app-sht31.git
-``` 
+```
 ## Configuration
 
 ### MQTT
@@ -53,10 +53,6 @@ sam install actions -g https://github.com/snipsco/snips-app-sht31.git
 | Config | Description | Value | Default |
 | --- | --- | --- | --- |
 | `if_fahrenheit` | If convert to fahrenheit value | `true` , `false` | `false` |
-
-## Acknowledgements
-
-Thanks to [Adafruit](https://github.com/ralf1070/Adafruit_Python_SHT31) providing the lovely SHT31 library.
 
 ## Contributing
 
