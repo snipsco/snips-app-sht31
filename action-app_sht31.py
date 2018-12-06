@@ -5,8 +5,8 @@ from snipsTools import SnipsConfigParser
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
-
-from Adafruit_SHT31 import *
+import time
+import smbus2
 
 CONFIG_INI = "config.ini"
 
@@ -26,16 +26,35 @@ class Temperature_Humidity_SHT31(object):
 
         self.site_id = self.config.get('secret',{"site_id":"default"}).get('site_id','default')
         self.if_fahrenheit = self.config.get('secret',{"if_fahrenheit":"false"}).get('if_fahrenheit', "false")
-        self.sensor = SHT31(address = 0x44)
+        self.bus = smbus2.SMBus(1)
         self.start_blocking()
+
+    def get_temperature_humidity(self, ret = 'cTemp'):
+
+        try:
+            self.bus.write_i2c_block_data(0x44, 0x2C, [0x06])
+            time.sleep(0.2)
+            data = self.bus.read_i2c_block_data(0x44, 0x00, 6)
+        except IOError:
+            print "[Error] No sensor found"
+            return
+
+        temp = data[0] * 256 + data[1]
+        cTemp = -45 + (175 * temp / 65535.0)
+        humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
+
+        if ret == 'temperature':
+            return cTemp
+        if ret == 'humidity':
+            return humidity
 
     def c_to_f(self, c):
         return c * 9.0 / 5.0 + 32.0
 
     def askTemperature(self, hermes, intent_message):
-        temp = round(self.sensor.read_temperature(), 1)
+        temp = round(self.get_temperature_humidity('temperature'), 1)
         temp_f = round(self.c_to_f(temp), 1)
-        
+
         print "Celsius: {}*C / Fahrenheit {}*F".format(temp, temp_f)
         msg = "The current temperature is {}{}"
 
@@ -49,11 +68,11 @@ class Temperature_Humidity_SHT31(object):
         hermes.publish_end_session(intent_message.session_id, msg)
 
     def askHumidity(self, hermes, intent_message):
-        humidity = round(self.sensor.read_humidity(), 2)
-        
+        humidity = round(self.get_temperature_humidity('humidity'), 1)
+
         print "Humidity: {}%".format(humidity)
         msg = "The current humidity is {}%".format(humidity)
-        
+
         hermes.publish_end_session(intent_message.session_id, msg)
 
     def master_intent_callback(self,hermes, intent_message):

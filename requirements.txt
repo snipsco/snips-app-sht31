@@ -1,4 +1,2 @@
-# Bindings for the hermes protocol 
 hermes-python>=0.1
-
-# More dependency goes here.. 
+smbus2
