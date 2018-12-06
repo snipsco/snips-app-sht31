@@ -59,9 +59,9 @@ class Temperature_Humidity_SHT31(object):
     def master_intent_callback(self,hermes, intent_message):
         if intent_message.site_id != self.site_id:
             return
-        if intent_message.intent.intent_name == 'coorfang:askTemperature':
+        if intent_message.intent.intent_name == 'checkTemperature':
             self.askTemperature(hermes, intent_message)
-        if intent_message.intent.intent_name == 'coorfang:askHumidity':
+        if intent_message.intent.intent_name == 'checkHumidity':
             self.askHumidity(hermes, intent_message)
 
     def start_blocking(self):
